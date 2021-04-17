@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blogs.mapper.ClassifyMapper">
+
+    <resultMap id="classifyMap" type="com.blogs.model.Classify">
+        <id property="id" column="id"></id>
+        <result property="insert_time" column="insert_time" javaType="java.util.Date"/>
+    </resultMap>
+
+    <sql id="select">
+        select `id`,`name`,`insert_time`,`color`,`active`,
+        (select count(b.id) from blogs b where b.classify_id = c.id) as `blogSum`
+        from `classify` c
+    </sql>
+
+    <select id="getActiveClassify" resultMap="classifyMap">
+        <include refid="select"></include>
+        where c.active = '1'
+    </select>
+
+    <select id="getAllClassify" resultMap="classifyMap">
+        <include refid="select"></include>
+    </select>
+
+</mapper>

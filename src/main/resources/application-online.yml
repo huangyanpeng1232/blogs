@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.94.251.61:3012/blogs?autoReconnect=true&useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    username: root
+    password: Abc246811..
+    maximum-pool-size: 20
+
+
+mybatis-plus:
+  mapper-locations: classpath:static/mapper/*.xml
+  typeAliasesPackage: com.blogs.model
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: false
+  global-config:
+    db-column-underline: false
+    capital-mode: false
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: false # 分页参数合理化 就是 你数据库只有一条数据 你写了  你想翻到 100 页 他也有数据
+  supportMethodsArguments: true
+  params: count=countSql
+
+
+page:
+  size: 10
+  search-size: 6
+minio:
+  url: http://47.94.251.61:9000
+  accessKey: admin
+  secretKey: Abc246811

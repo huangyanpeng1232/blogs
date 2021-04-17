@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blogs.mapper.TagMapper">
+
+    <resultMap id="tagMap" type="com.blogs.model.Tag">
+        <id property="id" column="id"></id>
+        <result property="insert_time" column="insert_time" javaType="java.util.Date"/>
+    </resultMap>
+
+    <sql id="select">
+        select `id`,`name`,`insert_time`,`color`,`active`,
+        (select count( bt.id ) from blog_tag bt where bt.tagId = t.id) AS `blogSum`
+        from `tag` t
+    </sql>
+
+    <select id="getActiveTag" resultMap="tagMap">
+        <include refid="select"></include>
+        where t.active = '1'
+    </select>
+
+    <select id="getAllTag" resultMap="tagMap">
+        <include refid="select"></include>
+    </select>
+    <select id="delTagById" resultMap="tagMap">
+        delete from tag where id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blogs.mapper.BlogMapper">
+    <resultMap type="com.blogs.model.Blog" id="blogMap">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="insert_time" column="insert_time"/>
+        <result property="update_time" column="update_time"/>
+        <result property="markdown" column="markdown"/>
+        <result property="content" column="content"/>
+        <result property="entry_type" column="entry_type"/>
+        <result property="entry_img" column="entry_img"/>
+        <result property="classify" column="classify"/>
+        <result property="status" column="status"/>
+
+    </resultMap>
+
+    <sql id="select">
+        select b.id,b.title,b.description,b.insert_time,b.update_time,b.markdown,b.content,b.entry_type,b.entry_img,b.status,
+        c.name AS classify
+
+        from blogs b
+        LEFT JOIN classify c ON b.classify_id = c.id
+        where 1 = 1
+    </sql>
+
+    <select id="getBlogList" resultMap="blogMap">
+        <include refid="select"></include>
+        <if test="searchText != null and searchText != ''">
+            and (
+                b.title like concat('%',#{searchText},'%')
+                or c.name like concat('%',#{searchText},'%')
+                or b.description like concat('%',#{searchText},'%')
+                or b.id in (
+                    select bt.blogId from tag t,blog_tag bt where t.id = bt.tagId and t.name like concat('%',#{searchText},'%')
+                )
+            )
+        </if>
+        <if test="status != null">
+            and `status` = #{status}
+        </if>
+    </select>
+
+    <select id="getBlogById"  resultMap="blogMap">
+        <include refid="select"></include>
+         and b.id = #{id}
+    </select>
+
+    <select id="getBlogListByClassId"  resultMap="blogMap">
+        <include refid="select"></include>
+        and b.classify_id = #{classifyId}
+        and status = '1'
+    </select>
+
+    <select id="getBlogListByTagId"  resultMap="blogMap">
+        <include refid="select"></include>
+        and b.id in (select bt.blogId from blog_tag bt where bt.tagId = #{tagId})
+        and status = '1'
+    </select>
+
+    <update id="updateBlog" parameterType="com.blogs.model.Blog">
+        UPDATE `blogs` SET `title` = #{title}, `description` = #{description}, `update_time` = now(), `markdown` = #{markdown}, `content` = #{content}, `entry_type` = #{entry_type}, `entry_img` = #{entry_img}, `classify_id` = #{classify}, `status` = #{status} WHERE `id` = #{id};
+    </update>
+
+    <update id="updateBlogStatus" parameterType="com.blogs.model.Blog">
+        UPDATE `blogs` SET `status` = #{status} WHERE `id` = #{id};
+    </update>
+
+    <insert id="insertBlog"  useGeneratedKeys="true" keyProperty="id" parameterType="com.blogs.model.Blog">
+        INSERT INTO `blogs` (`title`, `description`, `insert_time`, `update_time`, `markdown`, `content`, `entry_type`, `entry_img`, `classify_id`, `status`) VALUES (#{title}, #{description}, now(), NULL, #{markdown}, #{content}, #{entry_type}, #{entry_img}, #{classify}, #{status})
+    </insert>
+
+</mapper>
