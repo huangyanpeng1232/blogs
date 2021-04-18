@@ -16,5 +16,5 @@ public class Classify implements Serializable {
     private String color;
     private Integer active;
     private Integer blogSum;
-
+    private String status;
 }

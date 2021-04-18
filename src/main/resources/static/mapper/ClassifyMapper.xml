@@ -10,18 +10,22 @@
     </resultMap>
 
     <sql id="select">
-        select `id`,`name`,`insert_time`,`color`,`active`,
+        select `id`,`name`,`insert_time`,`color`,`active`,`status`,
         (select count(b.id) from blogs b where b.classify_id = c.id) as `blogSum`
-        from `classify` c
+        from `classify` c where c.`status` != 0
     </sql>
 
     <select id="getActiveClassify" resultMap="classifyMap">
         <include refid="select"></include>
-        where c.active = '1'
+        and c.active = '1'
     </select>
 
     <select id="getAllClassify" resultMap="classifyMap">
         <include refid="select"></include>
     </select>
+
+    <update id="updateToDelete">
+        update `classify` set `status` = '0' where `id` = #{id}
+    </update>
 
 </mapper>

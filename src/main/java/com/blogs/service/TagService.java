@@ -21,14 +21,12 @@ public class TagService {
     @Autowired
     private BlogTagMapper blogTagMapper;
 
-    @Cacheable("getActiveTag")
     public List<Tag> getActiveTag(){
         QueryWrapper<Tag> tagQueryWrapper = new QueryWrapper<>();
         tagQueryWrapper.eq("active","1");
         return tagMapper.selectList(tagQueryWrapper);
     }
 
-    @Cacheable(value = "getTagByName", key = "#name")
     public Tag getTagByName(String name){
         Map<String,Object> query = new HashMap<>();
         query.put("name",name);
@@ -40,7 +38,6 @@ public class TagService {
         }
     }
 
-    @Cacheable(value = "getTagByBlogId", key = "#id")
     public List<Tag> getTagByBlogId(int id){
          return tagMapper.getTagByBlogId(id);
     }

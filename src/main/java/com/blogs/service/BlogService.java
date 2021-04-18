@@ -42,7 +42,6 @@ public class BlogService {
     @Value("${page.size}")
     private int pageSize;
 
-    @Cacheable(value = "getBlogs", key = "#index+'_'+#status")
     public List<Blog> getBlogs(int index,String searchText,String status){
         PageHelper.startPage(index,pageSize);
         List<Blog> blogs = blogMapper.getBlogList(searchText,status);
@@ -57,14 +56,12 @@ public class BlogService {
         return blogs;
     }
 
-    @Cacheable(value = "getBlog", key = "#id")
     public Blog getBlog(int id) {
         Blog blog = blogMapper.getBlogById(id);
         addTags(blog);
         return blog;
     }
 
-    @Cacheable(value = "getBlogsByClassId", key = "#index+'_'+#classifyId")
     public List<Blog> getBlogsByClassId(int index,String classifyId){
         PageHelper.startPage(index,pageSize);
         List<Blog> blogs = blogMapper.getBlogListByClassId(classifyId);
@@ -72,7 +69,6 @@ public class BlogService {
         return blogs;
     }
 
-    @Cacheable(value = "getBlogsByTagId", key = "#index+'_'+#classifyId")
     public List<Blog> getBlogsByTagId(int index,String tagId){
         PageHelper.startPage(index,pageSize);
         List<Blog> blogs = blogMapper.getBlogListByTagId(tagId);
@@ -125,6 +121,7 @@ public class BlogService {
             classify.setInsert_time(new Date());
             classify.setName(blog.getClassify());
             classify.setActive(0);
+            classify.setStatus("1");
             classify.setColor("rgb(71, 212, 255)");
             classifyService.saveClassify(classify);
         }

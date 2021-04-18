@@ -19,7 +19,6 @@ public class ClassifyService {
     @Autowired
     private ClassifyMapper classifyMapper;
 
-    @Cacheable(value = "getClassifyByName", key = "#name")
     public Classify getClassifyByName(String name){
         Map<String,Object> query = new HashMap<>();
         query.put("name",name);
@@ -31,12 +30,10 @@ public class ClassifyService {
         }
     }
 
-    @CachePut(cacheNames = "getClassifyByName",key = "#classify.name")
     public void saveClassify(Classify classify) {
         classifyMapper.insert(classify);
     }
 
-    @Cacheable(value = "getActiveClassify")
     public List<Classify> getActiveClassify() {
         return classifyMapper.getActiveClassify();
     }
@@ -46,7 +43,7 @@ public class ClassifyService {
     }
 
     public void delClassifyById(int id) {
-        classifyMapper.deleteById(id);
+        classifyMapper.updateToDelete(id);
     }
 
     public void updateClassifyById(Classify classify) {
