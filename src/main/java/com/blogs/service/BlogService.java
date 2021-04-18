@@ -102,6 +102,7 @@ public class BlogService {
                     tag1.setActive(0);
                     tag1.setName(tag.getString("name"));
                     tag1.setInsert_time(new Date());
+                    tag1.setStatus("1");
                     tagMapper.insert(tag1);
 
                     BlogTag bt = new BlogTag();
@@ -129,7 +130,7 @@ public class BlogService {
     }
 
     public void deleteBlog(int id) {
-        blogMapper.deleteById(id);
+        blogMapper.updateDelete(id);
     }
 
     private void addTags(Blog blog) {

@@ -12,19 +12,20 @@
     <sql id="select">
         select `id`,`name`,`insert_time`,`color`,`active`,
         (select count( bt.id ) from blog_tag bt where bt.tagId = t.id) AS `blogSum`
-        from `tag` t
+        from `tag` t where t.`status` = 1
     </sql>
 
     <select id="getActiveTag" resultMap="tagMap">
         <include refid="select"></include>
-        where t.active = '1'
+        and t.active = '1'
     </select>
 
     <select id="getAllTag" resultMap="tagMap">
         <include refid="select"></include>
     </select>
-    <select id="delTagById" resultMap="tagMap">
-        delete from tag where id = #{id}
-    </select>
+
+    <update id="delTagById">
+        update `tag` set `status` = 0 where `id` = #{id}
+    </update>
 
 </mapper>

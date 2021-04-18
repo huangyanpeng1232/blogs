@@ -69,6 +69,10 @@
         UPDATE `blogs` SET `status` = #{status} WHERE `id` = #{id};
     </update>
 
+    <update id="updateDelete">
+        UPDATE `blogs` SET `status` = '0' WHERE `id` = #{id};
+    </update>
+
     <insert id="insertBlog"  useGeneratedKeys="true" keyProperty="id" parameterType="com.blogs.model.Blog">
         INSERT INTO `blogs` (`title`, `description`, `insert_time`, `update_time`, `markdown`, `content`, `entry_type`, `entry_img`, `classify_id`, `status`) VALUES (#{title}, #{description}, now(), NULL, #{markdown}, #{content}, #{entry_type}, #{entry_img}, #{classify}, #{status})
     </insert>

@@ -24,4 +24,6 @@ public interface BlogMapper extends BaseMapper<Blog> {
     List<Blog> getBlogListByClassId(@Param("classifyId") String classifyId);
 
     List<Blog> getBlogListByTagId(@Param("tagId") String classifyId);
+
+    void updateDelete(@Param("id") int id);
 }
