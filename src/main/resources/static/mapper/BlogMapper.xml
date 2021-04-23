@@ -24,7 +24,7 @@
 
         from blogs b
         LEFT JOIN classify c ON b.classify_id = c.id
-        where 1 = 1
+        where b.status != 0
     </sql>
 
     <select id="getBlogList" resultMap="blogMap">
@@ -40,7 +40,7 @@
             )
         </if>
         <if test="status != null">
-            and `status` = #{status}
+            and b.`status` = #{status}
         </if>
     </select>
 
@@ -52,13 +52,11 @@
     <select id="getBlogListByClassId"  resultMap="blogMap">
         <include refid="select"></include>
         and b.classify_id = #{classifyId}
-        and status = '1'
     </select>
 
     <select id="getBlogListByTagId"  resultMap="blogMap">
         <include refid="select"></include>
         and b.id in (select bt.blogId from blog_tag bt where bt.tagId = #{tagId})
-        and status = '1'
     </select>
 
     <update id="updateBlog" parameterType="com.blogs.model.Blog">

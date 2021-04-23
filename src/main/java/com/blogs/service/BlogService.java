@@ -37,6 +37,9 @@ public class BlogService {
     private ClassifyService classifyService;
 
     @Autowired
+    private ColorService colorService;
+
+    @Autowired
     private BlogMapper blogMapper;
 
     @Value("${page.size}")
@@ -98,7 +101,7 @@ public class BlogService {
                     blogTagMapper.saveBlogTag(bt);
                 }else{
                     Tag tag1 = new Tag();
-                    tag1.setColor("rgb(71, 212, 255)");
+                    tag1.setColor(colorService.randColor().getColor());
                     tag1.setActive(0);
                     tag1.setName(tag.getString("name"));
                     tag1.setInsert_time(new Date());
@@ -118,12 +121,13 @@ public class BlogService {
     public void addClassify(Blog blog){
         Classify classify = classifyService.getClassifyByName(blog.getClassify());
         if(classify == null){
+
             classify = new Classify();
             classify.setInsert_time(new Date());
             classify.setName(blog.getClassify());
             classify.setActive(0);
             classify.setStatus("1");
-            classify.setColor("rgb(71, 212, 255)");
+            classify.setColor(colorService.randColor().getColor());
             classifyService.saveClassify(classify);
         }
         blog.setClassify(String.valueOf(classify.getId()));
